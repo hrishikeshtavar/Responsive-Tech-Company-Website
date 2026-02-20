@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import zentureLogo from 'figma:asset/778d9226b8954cbeb882f9d03772126c1d30cbeb.png';
+import zentureLogo from '../../assets/778d9226b8954cbeb882f9d03772126c1d30cbeb.png';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
