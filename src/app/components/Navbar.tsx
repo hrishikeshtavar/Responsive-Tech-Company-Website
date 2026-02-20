@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import zentureLogo from 'figma:asset/778d9226b8954cbeb882f9d03772126c1d30cbeb.png';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,10 +18,9 @@ export function Navbar() {
 
   const navLinks = [
     { name: 'Home', href: '#home' },
-    { name: 'Services', href: '#services' },
-    { name: 'Tech Stack', href: '#tech-stack' },
-    { name: 'Clients', href: '#clients' },
     { name: 'About', href: '#about' },
+    { name: 'Services', href: '#services' },
+    { name: 'Portfolio', href: '#portfolio' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -55,9 +55,9 @@ export function Navbar() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-xl md:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
+            className="flex items-center"
           >
-            Zenture IT
+            <img src={zentureLogo} alt="Zenture IT Solutions" className="h-10 md:h-12 w-auto" />
           </motion.a>
 
           {/* Desktop Navigation */}

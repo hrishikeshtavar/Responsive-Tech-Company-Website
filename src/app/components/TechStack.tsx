@@ -149,13 +149,21 @@ export function TechStack() {
                 duration: 0.3,
                 delay: index * 0.03,
               }}
-              whileHover={{ scale: 1.1, y: -5 }}
+              whileHover={{ 
+                scale: 1.1, 
+                y: -5,
+                rotate: [0, -5, 5, -5, 0],
+              }}
               className="group relative bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 text-center hover:border-cyan-500/50 transition-all duration-300 cursor-pointer"
             >
               <div className="relative z-10">
-                <p className={`${tech.color} text-lg mb-1`}>
+                <motion.p 
+                  className={`${tech.color} text-lg mb-1`}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.2 }}
+                >
                   {tech.name}
-                </p>
+                </motion.p>
                 <p className="text-gray-500 text-xs">
                   {tech.category}
                 </p>
@@ -163,6 +171,14 @@ export function TechStack() {
 
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/10 group-hover:to-blue-500/10 rounded-xl transition-all duration-300" />
+              
+              {/* Shine effect on hover */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100"
+                initial={{ x: '-100%' }}
+                whileHover={{ x: '100%' }}
+                transition={{ duration: 0.6 }}
+              />
             </motion.div>
           ))}
         </div>

@@ -71,9 +71,10 @@ export function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: service.delay }}
+                whileHover={{ y: -10, scale: 1.02 }}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
-                className="group relative bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300 overflow-hidden"
+                className="group relative bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300 overflow-hidden cursor-pointer"
               >
                 {/* Gradient Background on Hover */}
                 <motion.div
@@ -82,10 +83,22 @@ export function Services() {
                   className={`absolute inset-0 bg-gradient-to-br ${service.color}`}
                 />
 
+                {/* Animated border gradient */}
+                <motion.div
+                  className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                  style={{
+                    background: `linear-gradient(45deg, transparent, ${hoveredIndex === index ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}, transparent)`,
+                  }}
+                />
+
                 <div className="relative z-10">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <motion.div 
+                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
                     <Icon className="w-7 h-7 text-white" />
-                  </div>
+                  </motion.div>
 
                   <h3 className="text-xl text-white mb-3 group-hover:text-cyan-400 transition-colors">
                     {service.title}
@@ -95,10 +108,14 @@ export function Services() {
                     {service.description}
                   </p>
 
-                  <div className="flex items-center text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <motion.div 
+                    className="flex items-center text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                    initial={{ x: -10 }}
+                    whileHover={{ x: 0 }}
+                  >
                     <span className="text-sm mr-2">Learn More</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Corner Accent */}
@@ -116,13 +133,15 @@ export function Services() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-16 text-center"
         >
-          <a
+          <motion.a
             href="#contact"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:scale-105 transition-transform duration-300 hover:shadow-lg hover:shadow-cyan-500/50"
           >
             <span>Start Your Project</span>
             <ArrowRight className="w-5 h-5" />
-          </a>
+          </motion.a>
         </motion.div>
       </div>
     </section>
