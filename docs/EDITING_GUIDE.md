@@ -5,7 +5,11 @@
 - Header links: `src/app/components/Navbar.tsx` (`navLinks` array)
 - Footer links/services: `src/app/components/Footer.tsx`
 - Careers page layout: `src/app/components/Careers.tsx`
-- Careers CMS data (job positions): `public/cms/careers.json`
+- Sanity fetch helpers/types: `src/app/lib/sanity.ts`
+- Sanity Studio schemas:
+  - `sanity/schemaTypes/hero.ts`
+  - `sanity/schemaTypes/careersPage.ts`
+- Legacy fallback careers data: `public/cms/careers.json`
 
 ## Careers CMS Schema
 Each item in `positions` supports:
@@ -20,6 +24,21 @@ Each item in `positions` supports:
 - `responsibilities`: string array
 - `applyUrl`: URL or mailto link
 - `postedDate`: `YYYY-MM-DD` (used for newest-first sorting)
+
+## Sanity Setup
+1. Frontend reads from:
+   - `VITE_SANITY_PROJECT_ID` (defaults to `pyodekba`)
+   - `VITE_SANITY_DATASET` (defaults to `production`)
+   - `VITE_SANITY_API_VERSION` (defaults to `2026-02-26`)
+2. Optional `.env` file in project root:
+   - `VITE_SANITY_PROJECT_ID=pyodekba`
+   - `VITE_SANITY_DATASET=production`
+   - `VITE_SANITY_API_VERSION=2026-02-26`
+3. Run Sanity Studio:
+   - `cd sanity`
+   - `npm i`
+   - `npm run dev`
+4. Create one `hero` document and one `careersPage` document in Studio.
 
 ## SEO Editing
 - Runtime SEO tags/schema: `src/app/components/SEO.tsx`

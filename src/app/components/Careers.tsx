@@ -1,35 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Briefcase, Building2, Clock3, MapPin } from 'lucide-react';
+import {
+  fetchCareersFromSanity,
+  type CareerPosition,
+  type CareersCMSData,
+} from '../lib/sanity';
 
-type EmploymentType = 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
-
-interface CareerPosition {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: EmploymentType;
-  experience: string;
-  summary: string;
-  requirements: string[];
-  responsibilities: string[];
-  applyUrl: string;
-  postedDate: string;
-}
-
-interface CareersCMSData {
-  heading: string;
-  subheading: string;
-  lastUpdated: string;
-  positions: CareerPosition[];
-}
-
-// Fallback data keeps the page usable if CMS JSON is unavailable during deployment.
+// Fallback keeps the page usable when CMS data is unavailable.
 const fallbackCareersData: CareersCMSData = {
   heading: 'Build The Future With Zenture IT',
   subheading: 'Join our team to work on meaningful software, AI, and IoT products.',
-  lastUpdated: '2026-02-26',
   positions: [
     {
       id: 'frontend-engineer-01',
@@ -84,20 +65,20 @@ const isCareerPosition = (item: unknown): item is CareerPosition => {
   const candidate = item as Partial<CareerPosition>;
   return Boolean(
     candidate.id &&
-    candidate.title &&
-    candidate.department &&
-    candidate.location &&
-    candidate.type &&
-    candidate.experience &&
-    candidate.summary &&
-    Array.isArray(candidate.requirements) &&
-    Array.isArray(candidate.responsibilities) &&
-    candidate.applyUrl &&
-    candidate.postedDate,
+      candidate.title &&
+      candidate.department &&
+      candidate.location &&
+      candidate.type &&
+      candidate.experience &&
+      candidate.summary &&
+      Array.isArray(candidate.requirements) &&
+      Array.isArray(candidate.responsibilities) &&
+      candidate.applyUrl &&
+      candidate.postedDate,
   );
 };
 
-const isCareersCMSData = (item: unknown): item is CareersCMSData => {
+const isCareersData = (item: unknown): item is CareersCMSData => {
   if (!item || typeof item !== 'object') {
     return false;
   }
@@ -105,10 +86,9 @@ const isCareersCMSData = (item: unknown): item is CareersCMSData => {
   const candidate = item as Partial<CareersCMSData>;
   return Boolean(
     candidate.heading &&
-    candidate.subheading &&
-    candidate.lastUpdated &&
-    Array.isArray(candidate.positions) &&
-    candidate.positions.every(isCareerPosition),
+      candidate.subheading &&
+      Array.isArray(candidate.positions) &&
+      candidate.positions.every(isCareerPosition),
   );
 };
 
@@ -121,19 +101,28 @@ export function Careers() {
 
     const loadCareersFromCMS = async () => {
       try {
-        // Primary editable source for roles:
-        // public/cms/careers.json
+        const sanityData = await fetchCareersFromSanity();
+        if (isMounted && sanityData && isCareersData(sanityData)) {
+          setCmsData(sanityData);
+          return;
+        }
+
+        // Legacy fallback source.
         const response = await fetch('/cms/careers.json', { cache: 'no-store' });
         if (!response.ok) {
           return;
         }
 
-        const data: unknown = await response.json();
-        if (isMounted && isCareersCMSData(data)) {
-          setCmsData(data);
+        const fileData: unknown = await response.json();
+        if (isMounted && isCareersData(fileData)) {
+          setCmsData({
+            heading: fileData.heading,
+            subheading: fileData.subheading,
+            positions: fileData.positions,
+          });
         }
       } catch (error) {
-        console.error('Failed to load careers CMS content:', error);
+        console.error('Failed to load careers content:', error);
       } finally {
         if (isMounted) {
           setIsLoading(false);
