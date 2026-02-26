@@ -6,7 +6,6 @@ import { Hero } from './components/Hero';
 import { Services } from './components/Services';
 import { TechStack } from './components/TechStack';
 import { Portfolio } from './components/Portfolio';
-import { Clients } from './components/Clients';
 import { Testimonials } from './components/Testimonials';
 import { Research } from './components/Research';
 import { Blog } from './components/Blog';
@@ -14,6 +13,7 @@ import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { IoTShowcase } from './components/IoTShowcase';
+import TrustedBy from "./components/TrustedBy";
 
 export default function App() {
   return (
@@ -27,7 +27,7 @@ export default function App() {
       <IoTShowcase />
       <TechStack />
       <Portfolio />
-      <Clients />
+      <TrustedBy />
       <Research />
       <Testimonials />
       <Blog />
