@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Code2, Zap, Rocket } from 'lucide-react';
-import { AnimatedGlobe } from './AnimatedGlobe';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { TubesBackground } from './ui/neon-flow';
 
 export function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -16,18 +16,18 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      {/* Animated Globe Background */}
-      <AnimatedGlobe />
-      
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+      {/* Neon tubes background */}
+      <TubesBackground className="absolute inset-0 min-h-0 bg-transparent" enableClickInteraction={true} />
+
       {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse" />
-        <div className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style={{ animationDelay: '1s' }} />
-        
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -top-48 -left-48 animate-pulse" />
+        <div className="absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style={{ animationDelay: '1s' }} />
+
         {/* Mouse-following gradient */}
         <motion.div
-          className="absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"
+          className="absolute w-96 h-96 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"
           animate={{
             x: mousePosition.x - 192,
             y: mousePosition.y - 192,
@@ -98,57 +98,6 @@ export function Hero() {
             Our Services
           </motion.a>
         </motion.div>
-
-        {/* Floating Elements with more animations */}
-        <div className="absolute top-1/4 left-10 hidden lg:block">
-          <motion.div
-            animate={{ 
-              y: [0, -20, 0],
-              rotate: [0, 180, 360],
-            }}
-            transition={{ 
-              duration: 6, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="w-16 h-16 border border-cyan-500/30 rounded-lg flex items-center justify-center"
-          >
-            <Code2 className="w-8 h-8 text-cyan-400/50" />
-          </motion.div>
-        </div>
-        <div className="absolute bottom-1/4 right-10 hidden lg:block">
-          <motion.div
-            animate={{ 
-              y: [0, 20, 0],
-              rotate: [360, 180, 0],
-            }}
-            transition={{ 
-              duration: 6, 
-              repeat: Infinity, 
-              delay: 1.5,
-              ease: "easeInOut"
-            }}
-            className="w-20 h-20 border border-blue-500/30 rounded-full flex items-center justify-center"
-          >
-            <Zap className="w-10 h-10 text-blue-400/50" />
-          </motion.div>
-        </div>
-        <div className="absolute top-1/3 right-1/4 hidden xl:block">
-          <motion.div
-            animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: [0, 90, 0],
-            }}
-            transition={{ 
-              duration: 5, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="w-12 h-12 border border-purple-500/30 rounded-lg flex items-center justify-center"
-          >
-            <Rocket className="w-6 h-6 text-purple-400/50" />
-          </motion.div>
-        </div>
       </div>
     </section>
   );

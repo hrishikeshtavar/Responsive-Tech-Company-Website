@@ -232,19 +232,6 @@ export function Research() {
           </div>
         </motion.div>
 
-        {/* CMS Note */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 p-6 bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl text-center"
-        >
-          <p className="text-purple-400 mb-2">🔬 Research Content Management</p>
-          <p className="text-gray-300 text-sm">
-            This research section is ready for backend integration. Connect to your CMS to dynamically manage research areas, publications, and achievements.
-          </p>
-        </motion.div>
       </div>
     </section>
   );
