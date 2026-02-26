@@ -6,6 +6,7 @@ import zentureLogo from '../../assets/b8c05efdc941bc9cc5b08381c59d5e91de475c0f.p
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isHomePage = window.location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,22 +17,31 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Edit this list to control header navigation labels/targets.
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/#home' },
+    { name: 'About', href: '/#about' },
+    { name: 'Services', href: '/#services' },
+    { name: 'Portfolio', href: '/#portfolio' },
+    { name: 'Careers', href: '/careers' },
+    { name: 'Contact', href: '/#contact' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const isHashNavigation = href.startsWith('/#');
+    if (!isHashNavigation || !isHomePage) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
     e.preventDefault();
     setIsMobileMenuOpen(false);
-    
-    if (href === '#home') {
+
+    const hash = href.slice(1);
+    if (hash === '#home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      const element = document.querySelector(href);
+      const element = document.querySelector(hash);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
@@ -50,8 +60,8 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <motion.a
-            href="#home"
-            onClick={(e) => handleNavClick(e, '#home')}
+            href="/#home"
+            onClick={(e) => handleNavClick(e, '/#home')}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}

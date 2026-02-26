@@ -44,10 +44,10 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {['Home', 'About', 'Services', 'Tech Stack', 'Portfolio', 'Clients', 'Research', 'Blog', 'Contact'].map((link) => (
+              {['Home', 'About', 'Services', 'Tech Stack', 'Portfolio', 'Clients', 'Research', 'Blog', 'Careers', 'Contact'].map((link) => (
                 <li key={link}>
                   <a
-                    href={`#${link.toLowerCase().replace(' ', '-')}`}
+                    href={link === 'Careers' ? '/careers' : `/#${link.toLowerCase().replace(' ', '-')}`}
                     className="text-gray-400 hover:text-cyan-400 transition-colors"
                   >
                     {link}
@@ -71,7 +71,7 @@ export function Footer() {
               ].map((service) => (
                 <li key={service}>
                   <a
-                    href="#services"
+                    href="/#services"
                     className="text-gray-400 hover:text-cyan-400 transition-colors"
                   >
                     {service}

@@ -8,4 +8,11 @@
   Run `npm i` to install the dependencies.
 
   Run `npm run dev` to start the development server.
+
+  ## Editing Content & SEO
+
+  See `docs/EDITING_GUIDE.md` for:
+  - CMS-driven careers updates
+  - navigation/content editing points
+  - SEO metadata, sitemap, and robots configuration
   

@@ -6,6 +6,8 @@ interface SEOProps {
   keywords?: string;
   ogImage?: string;
   ogUrl?: string;
+  pageType?: 'website' | 'article';
+  noIndex?: boolean;
 }
 
 export function SEO({
@@ -14,8 +16,15 @@ export function SEO({
   keywords = 'software development, web development, mobile app development, IoT solutions, AI development, React development, Node.js, Flutter, Python, custom software, enterprise solutions, Zenture IT Solutions',
   ogImage = 'https://zenture.in/og-image.jpg',
   ogUrl = 'https://zenture.in',
+  pageType = 'website',
+  noIndex = false,
 }: SEOProps) {
   useEffect(() => {
+    const siteName = 'Zenture IT Solutions';
+    const siteUrl = 'https://zenture.in';
+    const canonicalUrl = ogUrl;
+    const robotsContent = noIndex ? 'noindex, nofollow' : 'index, follow';
+
     // Update document title
     document.title = title;
 
@@ -30,48 +39,68 @@ export function SEO({
       element.content = content;
     };
 
+    const updateLinkTag = (rel: string, href: string) => {
+      let element = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+      if (!element) {
+        element = document.createElement('link');
+        element.rel = rel;
+        document.head.appendChild(element);
+      }
+      element.href = href;
+    };
+
+    const updateJsonLdScript = (id: string, data: Record<string, unknown>) => {
+      let scriptTag = document.querySelector(`script#${id}`) as HTMLScriptElement;
+      if (!scriptTag) {
+        scriptTag = document.createElement('script');
+        scriptTag.id = id;
+        scriptTag.type = 'application/ld+json';
+        document.head.appendChild(scriptTag);
+      }
+      scriptTag.textContent = JSON.stringify(data);
+    };
+
     // Standard meta tags
     updateMetaTag('description', description);
     updateMetaTag('keywords', keywords);
-    updateMetaTag('author', 'Zenture IT Solutions');
-    updateMetaTag('robots', 'index, follow');
+    updateMetaTag('author', siteName);
+    updateMetaTag('robots', robotsContent);
     updateMetaTag('viewport', 'width=device-width, initial-scale=1.0');
     updateMetaTag('language', 'English');
     updateMetaTag('revisit-after', '7 days');
+    updateMetaTag('referrer', 'strict-origin-when-cross-origin');
+    updateMetaTag('format-detection', 'telephone=no');
 
     // Open Graph meta tags
     updateMetaTag('og:title', title, 'property');
     updateMetaTag('og:description', description, 'property');
     updateMetaTag('og:image', ogImage, 'property');
-    updateMetaTag('og:url', ogUrl, 'property');
-    updateMetaTag('og:type', 'website', 'property');
-    updateMetaTag('og:site_name', 'Zenture IT Solutions', 'property');
+    updateMetaTag('og:url', canonicalUrl, 'property');
+    updateMetaTag('og:type', pageType, 'property');
+    updateMetaTag('og:site_name', siteName, 'property');
+    updateMetaTag('og:locale', 'en_IN', 'property');
 
     // Twitter Card meta tags
     updateMetaTag('twitter:card', 'summary_large_image');
     updateMetaTag('twitter:title', title);
     updateMetaTag('twitter:description', description);
     updateMetaTag('twitter:image', ogImage);
+    updateMetaTag('twitter:url', canonicalUrl);
+    updateMetaTag('twitter:site', '@zentureit');
 
     // Additional SEO meta tags
     updateMetaTag('theme-color', '#0891b2'); // Cyan-600
     updateMetaTag('msapplication-TileColor', '#0891b2');
 
-    // Canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = ogUrl;
+    // Canonical URL for indexing consistency across duplicate paths/params.
+    updateLinkTag('canonical', canonicalUrl);
 
-    // Add structured data (Schema.org JSON-LD)
-    const structuredData = {
+    // Structured data is split per type to keep edits readable for developers.
+    const organizationSchema = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'Zenture IT Solutions',
-      url: 'https://zenture.in',
+      name: siteName,
+      url: siteUrl,
       logo: 'https://zenture.in/logo.png',
       description: description,
       address: {
@@ -96,15 +125,30 @@ export function SEO({
       ],
     };
 
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (!scriptTag) {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      document.head.appendChild(scriptTag);
-    }
-    scriptTag.textContent = JSON.stringify(structuredData);
+    const websiteSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: siteName,
+      url: siteUrl,
+    };
 
-  }, [title, description, keywords, ogImage, ogUrl]);
+    const webPageSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: title,
+      description,
+      url: canonicalUrl,
+      isPartOf: {
+        '@type': 'WebSite',
+        name: siteName,
+        url: siteUrl,
+      },
+    };
+
+    updateJsonLdScript('schema-organization', organizationSchema);
+    updateJsonLdScript('schema-website', websiteSchema);
+    updateJsonLdScript('schema-webpage', webPageSchema);
+  }, [title, description, keywords, ogImage, ogUrl, pageType, noIndex]);
 
   return null;
 }
