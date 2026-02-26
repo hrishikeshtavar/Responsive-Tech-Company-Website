@@ -26,6 +26,8 @@ Each item in `positions` supports:
 - Base metadata fallback: `index.html`
 - Sitemap: `public/sitemap.xml`
 - Robots rules: `public/robots.txt`
+- Google Search Console verification: `index.html` (`google-site-verification`)
+- Favicon files: `public/zenture-logo.png`, `public/apple-touch-icon.png`
 
 ## Add A New Top-Level Page
 1. Add the component under `src/app/components/`.
