@@ -1,0 +1,6 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'>
+  <rect width='600' height='600' fill='#111827'/>
+  <rect x='42' y='42' width='516' height='516' fill='none' stroke='#d4af67' stroke-width='18'/>
+  <path d='M145 390L455 230M145 230L455 390' stroke='#d4af67' stroke-width='20' stroke-linecap='round'/>
+  <text x='300' y='500' text-anchor='middle' font-size='64' font-family='Arial, sans-serif' fill='#d4af67' font-weight='700'>INDIAN ARMY</text>
+</svg>

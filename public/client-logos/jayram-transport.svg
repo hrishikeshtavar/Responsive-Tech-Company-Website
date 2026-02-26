@@ -1,0 +1,8 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 280'>
+  <rect width='900' height='280' fill='#f8fafc'/>
+  <text x='68' y='150' font-size='72' font-family='Georgia, serif' fill='#ef4444' font-weight='700'>JAYRAM</text>
+  <text x='68' y='208' font-size='52' font-family='Georgia, serif' fill='#1e3a8a' font-weight='700'>TRANSPORT CORP.</text>
+  <rect x='584' y='94' width='210' height='54' rx='10' fill='#1e3a8a'/>
+  <circle cx='620' cy='160' r='18' fill='#1e3a8a'/>
+  <circle cx='760' cy='160' r='18' fill='#1e3a8a'/>
+</svg>
