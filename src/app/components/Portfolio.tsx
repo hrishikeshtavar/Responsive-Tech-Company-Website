@@ -1,75 +1,37 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ExternalLink, Github, ArrowRight, Code2, Smartphone, Globe, Cpu } from 'lucide-react';
-
-const projects = [
-  {
-    id: 1,
-    title: 'Army Communication System',
-    category: 'Enterprise Software',
-    description: 'Secure real-time communication platform for military operations with end-to-end encryption.',
-    image: 'military-tech',
-    tags: ['React', 'Node.js', 'WebRTC', 'Security'],
-    icon: Code2,
-    gradient: 'from-cyan-500 to-blue-600',
-  },
-  {
-    id: 2,
-    title: 'Forest Management Portal',
-    category: 'Web Application',
-    description: 'Comprehensive wildlife tracking and forest resource management system with GIS integration.',
-    image: 'forest-landscape',
-    tags: ['Angular', 'Python', 'MongoDB', 'GIS'],
-    icon: Globe,
-    gradient: 'from-green-500 to-emerald-600',
-  },
-  {
-    id: 3,
-    title: 'Records Verification App',
-    category: 'Mobile Application',
-    description: 'Digital platform for Guinness World Records verification and management processes.',
-    image: 'award-certificate',
-    tags: ['Flutter', 'Firebase', 'AI/ML'],
-    icon: Smartphone,
-    gradient: 'from-purple-500 to-pink-600',
-  },
-  {
-    id: 4,
-    title: 'Smart IoT Dashboard',
-    category: 'IoT Solution',
-    description: 'Real-time monitoring and control system for industrial IoT devices and sensors.',
-    image: 'technology-dashboard',
-    tags: ['React', 'MQTT', 'Arduino', 'AWS'],
-    icon: Cpu,
-    gradient: 'from-orange-500 to-red-600',
-  },
-  {
-    id: 5,
-    title: 'AI-Powered Analytics',
-    category: 'AI/ML Solution',
-    description: 'Machine learning platform for predictive analytics and business intelligence.',
-    image: 'data-analytics',
-    tags: ['Python', 'TensorFlow', 'React', 'PostgreSQL'],
-    icon: Code2,
-    gradient: 'from-blue-500 to-indigo-600',
-  },
-  {
-    id: 6,
-    title: 'E-Commerce Platform',
-    category: 'Web Application',
-    description: 'Scalable multi-vendor marketplace with advanced inventory and payment integration.',
-    image: 'online-shopping',
-    tags: ['Next.js', 'Node.js', 'Stripe', 'Redis'],
-    icon: Globe,
-    gradient: 'from-yellow-500 to-orange-600',
-  },
-];
-
-const categories = ['All', 'Web Application', 'Mobile Application', 'IoT Solution', 'AI/ML Solution', 'Enterprise Software'];
+import { useSiteContent } from '../context/SiteContentContext';
+import type { IconKey } from '../lib/siteContent';
 
 export function Portfolio() {
+  const { content } = useSiteContent();
+  const section = content.portfolio;
+  const projects = section.items;
+  const categories = section.categories;
   const [activeCategory, setActiveCategory] = useState('All');
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const iconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
+    code2: Code2,
+    smartphone: Smartphone,
+    globe: Globe,
+    cpu: Cpu,
+    wifi: Cpu,
+    database: Cpu,
+    shield: Cpu,
+    cloud: Cpu,
+    zap: Cpu,
+    code: Code2,
+    target: Code2,
+    lightbulb: Code2,
+    rocket: Code2,
+    brain: Code2,
+    beaker: Code2,
+    trendingUp: Code2,
+    users: Code2,
+    award: Code2,
+    bookOpen: Code2,
+  };
 
   const filteredProjects = activeCategory === 'All' 
     ? projects 
@@ -92,10 +54,13 @@ export function Portfolio() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Portfolio</span>
+            {section.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {section.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Explore our successful projects that have transformed businesses and delivered exceptional results
+            {section.subtitle}
           </p>
         </motion.div>
 
@@ -133,7 +98,7 @@ export function Portfolio() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredProjects.map((project, index) => {
-              const Icon = project.icon;
+              const Icon = iconMap[project.icon] || Code2;
               return (
                 <motion.div
                   key={project.id}
@@ -218,10 +183,10 @@ export function Portfolio() {
           className="mt-16 text-center"
         >
           <a
-            href="#contact"
+            href={section.ctaHref}
             className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:scale-105 transition-transform duration-300 hover:shadow-lg hover:shadow-cyan-500/50"
           >
-            <span>Start Your Project</span>
+            <span>{section.ctaText}</span>
             <ArrowRight className="w-5 h-5" />
           </a>
         </motion.div>

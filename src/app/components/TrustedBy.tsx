@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSiteContent } from "../context/SiteContentContext";
 
 type ClientLogo = {
   name: string;
@@ -184,6 +185,8 @@ function GradientLine() {
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 export default function TrustedBy() {
+  const { content } = useSiteContent();
+  const section = content.trustedBy;
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -262,7 +265,7 @@ export default function TrustedBy() {
             <span
               className="text-xs font-semibold tracking-[0.24em] uppercase text-cyan-400"
             >
-              Our Clientele
+              {section.eyebrow}
             </span>
             <span
               className="h-px w-10"
@@ -275,9 +278,9 @@ export default function TrustedBy() {
 
           {/* Main heading — exact same style as other section headings on the site */}
           <h2 className={`fu ${visible ? "show" : ""} text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-5`} style={{ animationDelay: "100ms" }}>
-            Trusted by{" "}
+            {section.titlePrefix}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              Industry Leaders
+              {section.titleHighlight}
             </span>
           </h2>
 
@@ -286,8 +289,7 @@ export default function TrustedBy() {
             className={`fu ${visible ? "show" : ""} text-slate-400 max-w-2xl mx-auto text-sm md:text-base`}
             style={{ animationDelay: "200ms" }}
           >
-            Partnerships built on delivery, reliability, and measurable impact across
-            defense, education, logistics, and industrial sectors.
+            {section.subtitle}
           </p>
         </div>
 
@@ -339,7 +341,7 @@ export default function TrustedBy() {
               className="inline-block w-2 h-2 rounded-full flex-shrink-0 pulse-ring"
               style={{ background: "#22d3ee" }}
             />
-            Active collaborations across 5+ industry verticals
+            {section.badgeText}
           </div>
         </div>
 

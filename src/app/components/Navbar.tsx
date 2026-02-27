@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import zentureLogo from '../../assets/b8c05efdc941bc9cc5b08381c59d5e91de475c0f.png';
+import { useSiteContent } from '../context/SiteContentContext';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isHomePage = window.location.pathname === '/';
+  const { content } = useSiteContent();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,14 +20,7 @@ export function Navbar() {
   }, []);
 
   // Edit this list to control header navigation labels/targets.
-  const navLinks = [
-    { name: 'Home', href: '/#home' },
-    { name: 'About', href: '/#about' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Portfolio', href: '/#portfolio' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Contact', href: '/#contact' },
-  ];
+  const navLinks = content.navbarLinks;
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const isHashNavigation = href.startsWith('/#');

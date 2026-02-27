@@ -15,6 +15,7 @@ import { Footer } from './components/Footer';
 import { IoTShowcase } from './components/IoTShowcase';
 import TrustedBy from "./components/TrustedBy";
 import { Careers } from './components/Careers';
+import { SiteContentProvider } from './context/SiteContentContext';
 
 export default function App() {
   // Keep routing lightweight for this static deployment:
@@ -24,39 +25,43 @@ export default function App() {
 
   if (isCareersPage) {
     return (
-      <div className="min-h-screen bg-slate-900">
-        <SEO
-          title="Careers - Zenture IT Solutions"
-          description="Explore open positions at Zenture IT Solutions and apply to join our team."
-          keywords="careers, jobs, hiring, software engineer roles, Zenture IT Solutions"
-          ogUrl="https://zenture.in/careers"
-        />
-        <ScrollProgress />
-        <Navbar />
-        <Careers />
-        <Footer />
-      </div>
+      <SiteContentProvider>
+        <div className="min-h-screen bg-slate-900">
+          <SEO
+            title="Careers - Zenture IT Solutions"
+            description="Explore open positions at Zenture IT Solutions and apply to join our team."
+            keywords="careers, jobs, hiring, software engineer roles, Zenture IT Solutions"
+            ogUrl="https://zenture.in/careers"
+          />
+          <ScrollProgress />
+          <Navbar />
+          <Careers />
+          <Footer />
+        </div>
+      </SiteContentProvider>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      {/* Home page section order is managed here for easy content flow edits. */}
-      <SEO />
-      <ScrollProgress />
-      <Navbar />
-      <Hero />
-      <About />
-      <Services />
-      <IoTShowcase />
-      <TechStack />
-      <Portfolio />
-      <TrustedBy />
-      <Research />
-      <Testimonials />
-      <Blog />
-      <Contact />
-      <Footer />
-    </div>
+    <SiteContentProvider>
+      <div className="min-h-screen bg-slate-900">
+        {/* Home page section order is managed here for easy content flow edits. */}
+        <SEO />
+        <ScrollProgress />
+        <Navbar />
+        <Hero />
+        <About />
+        <Services />
+        <IoTShowcase />
+        <TechStack />
+        <Portfolio />
+        <TrustedBy />
+        <Research />
+        <Testimonials />
+        <Blog />
+        <Contact />
+        <Footer />
+      </div>
+    </SiteContentProvider>
   );
 }

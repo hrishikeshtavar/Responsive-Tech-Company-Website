@@ -2,81 +2,37 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { BookOpen, Award, FileText, Users, TrendingUp, Beaker } from 'lucide-react';
 import labImage from '../../assets/5386f32844836c80df451078afcac6ca0166238f.png';
-
-const researchAreas = [
-  {
-    icon: Beaker,
-    title: 'AI & Machine Learning',
-    description: 'Exploring advanced neural networks, natural language processing, and computer vision applications.',
-    publications: 8,
-    color: 'from-cyan-500 to-blue-500',
-  },
-  {
-    icon: TrendingUp,
-    title: 'IoT & Edge Computing',
-    description: 'Research on low-power IoT devices, edge AI, and distributed computing architectures.',
-    publications: 6,
-    color: 'from-blue-500 to-purple-500',
-  },
-  {
-    icon: Users,
-    title: 'Human-Computer Interaction',
-    description: 'Studying user experience patterns, accessibility, and intuitive interface design.',
-    publications: 5,
-    color: 'from-purple-500 to-pink-500',
-  },
-];
-
-const publications = [
-  {
-    title: 'Optimizing Edge AI for Low-Power IoT Devices',
-    journal: 'IEEE Transactions on IoT',
-    year: '2025',
-    authors: 'Zenture Research Team',
-    type: 'Conference Paper',
-  },
-  {
-    title: 'Neural Network Architectures for Real-Time Object Detection',
-    journal: 'International Journal of Computer Vision',
-    year: '2025',
-    authors: 'AI Research Division',
-    type: 'Journal Article',
-  },
-  {
-    title: 'Secure Communication Protocols for Military Applications',
-    journal: 'Journal of Cybersecurity',
-    year: '2024',
-    authors: 'Security Research Team',
-    type: 'Research Paper',
-  },
-  {
-    title: 'Scalable Microservices Architecture for Enterprise Systems',
-    journal: 'ACM Computing Surveys',
-    year: '2024',
-    authors: 'Software Engineering Team',
-    type: 'Survey Paper',
-  },
-];
-
-const achievements = [
-  {
-    icon: Award,
-    title: 'Best Paper Award',
-    description: 'IEEE International Conference on IoT 2025',
-  },
-  {
-    icon: BookOpen,
-    title: '25+ Publications',
-    description: 'In leading journals and conferences',
-  },
-  {
-    icon: Users,
-    title: 'Industry Collaborations',
-    description: 'Partnerships with top universities',
-  },
-];
+import { useSiteContent } from '../context/SiteContentContext';
+import type { IconKey } from '../lib/siteContent';
 
 export function Research() {
+  const { content } = useSiteContent();
+  const section = content.research;
+  const researchAreas = section.areas;
+  const publications = section.publications;
+  const achievements = section.achievements;
+  const iconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
+    beaker: Beaker,
+    trendingUp: TrendingUp,
+    users: Users,
+    award: Award,
+    bookOpen: BookOpen,
+    wifi: Users,
+    database: Users,
+    shield: Users,
+    cloud: Users,
+    zap: Users,
+    target: Users,
+    lightbulb: Users,
+    rocket: Users,
+    globe: Users,
+    code: Users,
+    smartphone: Users,
+    cpu: Users,
+    brain: Users,
+    code2: Users,
+  };
+
   return (
     <section id="research" className="relative py-20 md:py-32 bg-slate-800 overflow-hidden">
       {/* Background Elements */}
@@ -95,17 +51,20 @@ export function Research() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Research & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Innovation</span>
+            {section.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {section.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Pushing the boundaries of technology through cutting-edge research and development
+            {section.subtitle}
           </p>
         </motion.div>
 
         {/* Research Areas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {researchAreas.map((area, index) => {
-            const Icon = area.icon;
+            const Icon = iconMap[area.icon] || Beaker;
             return (
               <motion.div
                 key={area.title}
@@ -150,7 +109,7 @@ export function Research() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
         >
           {achievements.map((achievement, index) => {
-            const Icon = achievement.icon;
+            const Icon = iconMap[achievement.icon] || Award;
             return (
               <motion.div
                 key={achievement.title}
@@ -184,9 +143,9 @@ export function Research() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-8">
-              <h3 className="text-2xl text-white mb-2">State-of-the-Art Research Facilities</h3>
+              <h3 className="text-2xl text-white mb-2">{section.labTitle}</h3>
               <p className="text-gray-300 text-lg">
-                Our advanced research lab equipped with cutting-edge technology for IoT, AI, and embedded systems development
+                {section.labDescription}
               </p>
             </div>
           </div>
@@ -199,7 +158,7 @@ export function Research() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <h3 className="text-2xl text-white mb-8 text-center">Recent Publications</h3>
+          <h3 className="text-2xl text-white mb-8 text-center">{section.publicationSectionTitle}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {publications.map((pub, index) => (
               <motion.div

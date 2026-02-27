@@ -2,8 +2,34 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Target, Lightbulb, Rocket, CheckCircle } from 'lucide-react';
 import aboutImage from '../../assets/f8b170fa73ea4ab14a127e1e8a06fc491da0677a.png';
+import { useSiteContent } from '../context/SiteContentContext';
+import type { IconKey } from '../lib/siteContent';
 
 export function About() {
+  const { content } = useSiteContent();
+  const about = content.about;
+  const valueIconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
+    target: Target,
+    lightbulb: Lightbulb,
+    rocket: Rocket,
+    wifi: Target,
+    database: Target,
+    shield: Target,
+    cloud: Target,
+    zap: Target,
+    globe: Target,
+    code: Target,
+    smartphone: Target,
+    cpu: Target,
+    brain: Target,
+    code2: Target,
+    beaker: Target,
+    trendingUp: Target,
+    users: Target,
+    award: Target,
+    bookOpen: Target,
+  };
+
   return (
     <section id="about" className="relative py-20 md:py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,10 +41,13 @@ export function About() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Zenture IT</span>
+            {about.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {about.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Pioneering digital transformation through innovative technology solutions
+            {about.subtitle}
           </p>
         </motion.div>
 
@@ -49,8 +78,8 @@ export function About() {
               className="absolute -bottom-6 -right-6 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl p-6 shadow-2xl"
             >
               <div className="text-white">
-                <p className="text-3xl mb-1">15+</p>
-                <p className="text-sm opacity-90">Years of Excellence</p>
+                <p className="text-3xl mb-1">{about.yearsValue}</p>
+                <p className="text-sm opacity-90">{about.yearsLabel}</p>
               </div>
             </motion.div>
           </motion.div>
@@ -63,19 +92,14 @@ export function About() {
             transition={{ duration: 0.6 }}
           >
             <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-              Zenture IT Solutions is a leading software development company specializing in creating innovative digital solutions that drive business growth and transformation.
+              {about.paragraph1}
             </p>
             <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-              With expertise spanning web development, mobile applications, IoT, and AI, we empower organizations to harness the full potential of technology.
+              {about.paragraph2}
             </p>
 
             <div className="space-y-4">
-              {[
-                'Expert team of developers and engineers',
-                'Agile development methodology',
-                'End-to-end project management',
-                '24/7 technical support and maintenance',
-              ].map((item, index) => (
+              {about.highlights.map((item, index) => (
                 <motion.div
                   key={item}
                   initial={{ opacity: 0, x: 20 }}
@@ -94,24 +118,8 @@ export function About() {
 
         {/* Values */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              icon: Target,
-              title: 'Our Mission',
-              description: 'To deliver cutting-edge technology solutions that empower businesses to achieve their digital ambitions.',
-            },
-            {
-              icon: Lightbulb,
-              title: 'Innovation',
-              description: 'Constantly exploring new technologies and methodologies to stay ahead of the curve.',
-            },
-            {
-              icon: Rocket,
-              title: 'Excellence',
-              description: 'Committed to delivering the highest quality solutions that exceed client expectations.',
-            },
-          ].map((value, index) => {
-            const Icon = value.icon;
+          {about.values.map((value, index) => {
+            const Icon = valueIconMap[value.icon] || Target;
             return (
               <motion.div
                 key={value.title}

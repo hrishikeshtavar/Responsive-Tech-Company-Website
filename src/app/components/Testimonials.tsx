@@ -1,65 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Quote, Star, ChevronLeft, ChevronRight, User } from 'lucide-react';
-
-const testimonials = [
-  {
-    id: 1,
-    name: 'Col. Rajesh Kumar',
-    position: 'Project Director',
-    organization: 'Indian Army',
-    content: 'Zenture IT Solutions delivered a robust and secure communication system that exceeded our expectations. Their attention to security details and timely delivery was impressive.',
-    rating: 5,
-    image: 'military-officer',
-  },
-  {
-    id: 2,
-    name: 'Dr. Priya Sharma',
-    position: 'Chief Technology Officer',
-    organization: 'Indian Forest Department',
-    content: 'The wildlife tracking system has revolutionized our forest management. The team\'s expertise in GIS integration and real-time data processing is outstanding.',
-    rating: 5,
-    image: 'professional-woman',
-  },
-  {
-    id: 3,
-    name: 'Michael Chen',
-    position: 'Digital Operations Manager',
-    organization: 'Guinness World Records',
-    content: 'Working with Zenture was a pleasure. They understood our unique verification needs and created a platform that streamlined our entire records management process.',
-    rating: 5,
-    image: 'business-man',
-  },
-  {
-    id: 4,
-    name: 'Sarah Anderson',
-    position: 'CEO',
-    organization: 'TechVentures Inc.',
-    content: 'The AI-powered analytics platform they developed has transformed how we make business decisions. The insights we gain are invaluable.',
-    rating: 5,
-    image: 'executive-woman',
-  },
-  {
-    id: 5,
-    name: 'Amit Patel',
-    position: 'Operations Director',
-    organization: 'SmartFactory Solutions',
-    content: 'Their IoT solutions have optimized our manufacturing processes. Real-time monitoring and predictive maintenance have saved us significant costs.',
-    rating: 5,
-    image: 'tech-professional',
-  },
-  {
-    id: 6,
-    name: 'Emma Wilson',
-    position: 'Founder',
-    organization: 'GreenTech Innovations',
-    content: 'Exceptional team! They built our mobile app from scratch with incredible attention to detail. The user experience is flawless.',
-    rating: 5,
-    image: 'entrepreneur-woman',
-  },
-];
+import { useSiteContent } from '../context/SiteContentContext';
 
 export function Testimonials() {
+  const { content } = useSiteContent();
+  const section = content.testimonials;
+  const testimonials = section.items;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -110,10 +57,13 @@ export function Testimonials() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Client <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Testimonials</span>
+            {section.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {section.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Don't just take our word for it - hear what our clients have to say about working with us
+            {section.subtitle}
           </p>
         </motion.div>
 
@@ -278,12 +228,7 @@ export function Testimonials() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
         >
-          {[
-            { number: '200+', label: 'Happy Clients' },
-            { number: '98%', label: 'Satisfaction Rate' },
-            { number: '150+', label: 'Projects Delivered' },
-            { number: '24/7', label: 'Support Available' },
-          ].map((stat, index) => (
+          {section.stats.map((stat, index) => (
             <div
               key={stat.label}
               className="text-center p-6 bg-slate-800/30 border border-slate-700/50 rounded-xl"

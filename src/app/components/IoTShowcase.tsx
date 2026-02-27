@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Cpu, Wifi, Database, Shield, Cloud, Zap } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from './ui/carousel';
+import { useSiteContent } from '../context/SiteContentContext';
+import type { IconKey } from '../lib/siteContent';
 
 // Import images from src/assets
 import work1 from '../../assets/ee1f533d6643fba6d67d16aeeecda30c465f7d7e.png';
@@ -10,40 +12,32 @@ import work3 from '../../assets/816540b8e2c65b192123ec8b53955413bb48ba11.png';
 import work4 from '../../assets/felicitation.JPG';
 import work5 from '../../assets/manufacturing.jpg';
 
-const iotFeatures = [
-  {
-    icon: Cpu,
-    title: 'Edge Computing',
-    description: 'Process data closer to the source for faster insights',
-  },
-  {
-    icon: Wifi,
-    title: 'Connectivity',
-    description: 'Multi-protocol support for seamless device integration',
-  },
-  {
-    icon: Database,
-    title: 'Data Analytics',
-    description: 'Real-time data processing and visualization',
-  },
-  {
-    icon: Shield,
-    title: 'Security',
-    description: 'Enterprise-grade encryption and security protocols',
-  },
-  {
-    icon: Cloud,
-    title: 'Cloud Integration',
-    description: 'Seamless cloud connectivity and data synchronization',
-  },
-  {
-    icon: Zap,
-    title: 'Automation',
-    description: 'Intelligent automation and remote monitoring',
-  },
-];
-
 export function IoTShowcase() {
+  const { content } = useSiteContent();
+  const section = content.iot;
+  const iotFeatures = section.features;
+  const iconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
+    cpu: Cpu,
+    wifi: Wifi,
+    database: Database,
+    shield: Shield,
+    cloud: Cloud,
+    zap: Zap,
+    code: Cpu,
+    smartphone: Cpu,
+    globe: Cpu,
+    brain: Cpu,
+    code2: Cpu,
+    target: Cpu,
+    lightbulb: Cpu,
+    rocket: Cpu,
+    beaker: Cpu,
+    trendingUp: Cpu,
+    users: Cpu,
+    award: Cpu,
+    bookOpen: Cpu,
+  };
+
   return (
     <section className="relative py-20 md:py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       {/* Background Elements */}
@@ -62,13 +56,13 @@ export function IoTShowcase() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Full Spectrum{' '}
+            {section.titlePrefix}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-red-500">
-              Technology Solutions
+              {section.titleHighlight}
             </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Connecting the physical and digital worlds through innovative Internet of Things solutions
+            {section.subtitle}
           </p>
         </motion.div>
 
@@ -80,12 +74,11 @@ export function IoTShowcase() {
           transition={{ duration: 0.6 }}
           className="mb-16 rounded-xl border border-slate-700 hover:border-pink-500/50 transition-all duration-300 p-4 bg-slate-800/40 backdrop-blur-sm">
           <h3 className="text-xl text-white mb-3 text-center">
-           Enterprise Field Implementation
+           {section.implementationTitle}
           </h3>
 
            <p className="text-gray-300 text-sm text-center mb-6 max-w-2xl mx-auto">
-             We design, build, and deploy resilient digital systems that perform reliably
-             in enterprise, industrial, and government-grade environments.
+             {section.implementationDescription}
            </p>
 
   <Carousel className="w-full max-w-3xl mx-auto">
@@ -111,7 +104,7 @@ export function IoTShowcase() {
         {/* IoT Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {iotFeatures.map((feature, index) => {
-            const Icon = feature.icon;
+            const Icon = iconMap[feature.icon] || Cpu;
             return (
               <motion.div
                 key={feature.title}
@@ -150,18 +143,9 @@ export function IoTShowcase() {
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-br from-pink-500/10 to-red-500/10 border border-pink-500/20 rounded-2xl p-8"
         >
-          <h3 className="text-2xl text-white mb-6 text-center">IoT Application Areas</h3>
+          <h3 className="text-2xl text-white mb-6 text-center">{section.applicationAreaTitle}</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              'Smart Agriculture',
-              'Industrial Automation',
-              'Smart Cities',
-              'Healthcare Monitoring',
-              'Environmental Sensing',
-              'Asset Tracking',
-              'Energy Management',
-              'Supply Chain',
-            ].map((useCase, index) => (
+            {section.useCases.map((useCase, index) => (
               <motion.div
                 key={useCase}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -179,4 +163,3 @@ export function IoTShowcase() {
     </section>
   );
 }
-

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useSiteContent } from '../context/SiteContentContext';
 
 export function Contact() {
+  const { content } = useSiteContent();
+  const section = content.contact;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,10 +39,13 @@ export function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Touch</span>
+            {section.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {section.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Ready to start your next project? Let's discuss how we can help you achieve your goals
+            {section.subtitle}
           </p>
         </motion.div>
 
@@ -53,34 +59,15 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl text-white mb-6">Contact Information</h3>
+              <h3 className="text-2xl text-white mb-6">{section.infoTitle}</h3>
               <p className="text-gray-400 mb-8">
-                We're here to answer your questions and discuss your project requirements.
+                {section.infoDescription}
               </p>
             </div>
 
             <div className="space-y-6">
-              {[
-                {
-                  icon: Mail,
-                  title: 'Email',
-                  content: 'contact@zentureit.com',
-                  link: 'mailto:contact@zentureit.com',
-                },
-                {
-                  icon: Phone,
-                  title: 'Phone',
-                  content: '+91 (XXX) XXX-XXXX',
-                  link: 'tel:+91XXXXXXXXXX',
-                },
-                {
-                  icon: MapPin,
-                  title: 'Location',
-                  content: 'India',
-                  link: null,
-                },
-              ].map((item, index) => {
-                const Icon = item.icon;
+              {section.items.map((item, index) => {
+                const Icon = item.type === 'email' ? Mail : item.type === 'phone' ? Phone : MapPin;
                 return (
                   <motion.div
                     key={item.title}
@@ -95,7 +82,7 @@ export function Contact() {
                     </div>
                     <div>
                       <p className="text-gray-400 text-sm mb-1">{item.title}</p>
-                      {item.link ? (
+                      {item.link && item.type !== 'location' ? (
                         <a
                           href={item.link}
                           className="text-white hover:text-cyan-400 transition-colors"
@@ -119,9 +106,9 @@ export function Contact() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="p-6 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-xl"
             >
-              <p className="text-cyan-400 mb-2">⚡ Quick Response Time</p>
+              <p className="text-cyan-400 mb-2">⚡ {section.responseTitle}</p>
               <p className="text-gray-300 text-sm">
-                We typically respond to inquiries within 24 hours
+                {section.responseText}
               </p>
             </motion.div>
           </motion.div>

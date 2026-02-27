@@ -2,9 +2,18 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
 import zentureLogo from '../../assets/b8c05efdc941bc9cc5b08381c59d5e91de475c0f.png';
+import { useSiteContent } from '../context/SiteContentContext';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { content } = useSiteContent();
+  const footer = content.footer;
+  const socialIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    github: Github,
+    linkedin: Linkedin,
+    twitter: Twitter,
+    mail: Mail,
+  };
 
   return (
     <footer className="relative bg-slate-950 border-t border-slate-800">
@@ -16,16 +25,11 @@ export function Footer() {
               <img src={zentureLogo} alt="Zenture IT Solutions" className="h-12 w-auto" />
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
-              Transforming ideas into innovative digital solutions. We specialize in web development, mobile apps, IoT, and AI-powered applications.
+              {footer.description}
             </p>
             <div className="flex space-x-4">
-              {[
-                { icon: Github, link: '#' },
-                { icon: Linkedin, link: '#' },
-                { icon: Twitter, link: '#' },
-                { icon: Mail, link: '#' },
-              ].map((social, index) => {
-                const Icon = social.icon;
+              {footer.socialLinks.map((social, index) => {
+                const Icon = socialIconMap[social.platform] || Mail;
                 return (
                   <motion.a
                     key={index}
@@ -44,7 +48,7 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {['Home', 'About', 'Services', 'Tech Stack', 'Portfolio', 'Clients', 'Research', 'Blog', 'Careers', 'Contact'].map((link) => (
+              {footer.quickLinks.map((link) => (
                 <li key={link}>
                   <a
                     href={link === 'Careers' ? '/careers' : `/#${link.toLowerCase().replace(' ', '-')}`}
@@ -61,14 +65,7 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Services</h3>
             <ul className="space-y-2">
-              {[
-                'Web Development',
-                'Software Development',
-                'Mobile Apps',
-                'IoT Solutions',
-                'AI Solutions',
-                'IT Consultation',
-              ].map((service) => (
+              {footer.services.map((service) => (
                 <li key={service}>
                   <a
                     href="/#services"
@@ -88,15 +85,11 @@ export function Footer() {
             © {currentYear} Zenture IT Solutions. All rights reserved.
           </p>
           <div className="flex space-x-6 text-sm">
-            <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">
-              Terms of Service
-            </a>
-            <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">
-              Cookie Policy
-            </a>
+            {footer.legalLinks.map((link) => (
+              <a key={link.label} href={link.href} className="text-gray-400 hover:text-cyan-400 transition-colors">
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

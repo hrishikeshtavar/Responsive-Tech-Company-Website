@@ -1,80 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, User, ArrowRight, Clock } from 'lucide-react';
-
-// Mock blog data - in production, this would come from a CMS/backend
-const blogPosts = [
-  {
-    id: 1,
-    title: 'The Future of AI in Software Development',
-    excerpt: 'Explore how artificial intelligence is revolutionizing the way we build and deploy software applications.',
-    author: 'Zenture Team',
-    date: '2026-02-15',
-    readTime: '5 min read',
-    category: 'AI & ML',
-    image: 'ai-technology',
-    slug: 'future-of-ai-in-software-development',
-  },
-  {
-    id: 2,
-    title: 'Building Scalable IoT Solutions',
-    excerpt: 'Learn best practices for creating IoT systems that can handle millions of connected devices efficiently.',
-    author: 'John Doe',
-    date: '2026-02-10',
-    readTime: '7 min read',
-    category: 'IoT',
-    image: 'iot-devices',
-    slug: 'building-scalable-iot-solutions',
-  },
-  {
-    id: 3,
-    title: 'Mobile App Development Trends 2026',
-    excerpt: 'Discover the latest trends shaping mobile application development this year.',
-    author: 'Jane Smith',
-    date: '2026-02-05',
-    readTime: '6 min read',
-    category: 'Mobile Development',
-    image: 'mobile-app-development',
-    slug: 'mobile-app-development-trends-2026',
-  },
-  {
-    id: 4,
-    title: 'Cloud Architecture Best Practices',
-    excerpt: 'Essential patterns and strategies for building robust cloud-native applications.',
-    author: 'Zenture Team',
-    date: '2026-01-28',
-    readTime: '8 min read',
-    category: 'Cloud Computing',
-    image: 'cloud-infrastructure',
-    slug: 'cloud-architecture-best-practices',
-  },
-  {
-    id: 5,
-    title: 'Cybersecurity in Modern Web Apps',
-    excerpt: 'Critical security measures every developer should implement in their web applications.',
-    author: 'Security Team',
-    date: '2026-01-20',
-    readTime: '10 min read',
-    category: 'Security',
-    image: 'cybersecurity',
-    slug: 'cybersecurity-modern-web-apps',
-  },
-  {
-    id: 6,
-    title: 'The Rise of Low-Code Development',
-    excerpt: 'How low-code platforms are democratizing software development and accelerating delivery.',
-    author: 'Tech Insights',
-    date: '2026-01-15',
-    readTime: '5 min read',
-    category: 'Development',
-    image: 'coding-workspace',
-    slug: 'rise-of-low-code-development',
-  },
-];
-
-const categories = ['All', 'AI & ML', 'IoT', 'Mobile Development', 'Cloud Computing', 'Security', 'Development'];
+import { useSiteContent } from '../context/SiteContentContext';
 
 export function Blog() {
+  const { content } = useSiteContent();
+  const section = content.blog;
+  const blogPosts = section.posts;
+  const categories = section.categories;
   const [activeCategory, setActiveCategory] = useState('All');
 
   const filteredPosts = activeCategory === 'All' 
@@ -98,10 +31,13 @@ export function Blog() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Insights</span>
+            {section.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {section.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Stay updated with the latest trends, insights, and best practices in technology
+            {section.subtitle}
           </p>
         </motion.div>
 

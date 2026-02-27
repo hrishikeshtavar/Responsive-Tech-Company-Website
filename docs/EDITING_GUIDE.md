@@ -2,14 +2,16 @@
 
 ## Content Editing
 - Home page section order: `src/app/App.tsx`
-- Header links: `src/app/components/Navbar.tsx` (`navLinks` array)
-- Footer links/services: `src/app/components/Footer.tsx`
-- Careers page layout: `src/app/components/Careers.tsx`
-- Sanity fetch helpers/types: `src/app/lib/sanity.ts`
+- Header links/content source: Sanity `siteContent.navbarLinks`
+- Footer links/services source: Sanity `siteContent.footer`
+- Careers page layout/content source: Sanity `careersPage` document
+- Shared content context: `src/app/context/SiteContentContext.tsx`
+- Sanity fetch helpers/types: `src/app/lib/sanity.ts`, `src/app/lib/siteContent.ts`
 - Sanity Studio schemas:
   - `sanity/schemaTypes/hero.ts`
   - `sanity/schemaTypes/careersPage.ts`
-- Legacy fallback careers data: `public/cms/careers.json`
+  - `sanity/schemaTypes/siteContent.ts`
+- Legacy fallback careers data: `public/cms/careers.json` (used if CMS is unavailable)
 
 ## Careers CMS Schema
 Each item in `positions` supports:
@@ -38,7 +40,14 @@ Each item in `positions` supports:
    - `cd sanity`
    - `npm i`
    - `npm run dev`
-4. Create one `hero` document and one `careersPage` document in Studio.
+4. Create one `hero` document, one `careersPage` document, and one `siteContent` document in Studio.
+
+## SiteContent Icon Keys
+For `siteContent` arrays that include `icon`, use supported keys:
+- `target`, `lightbulb`, `rocket`
+- `globe`, `code`, `smartphone`, `cpu`, `brain`, `code2`
+- `wifi`, `database`, `shield`, `cloud`, `zap`
+- `beaker`, `trendingUp`, `users`, `award`, `bookOpen`
 
 ## SEO Editing
 - Runtime SEO tags/schema: `src/app/components/SEO.tsx`

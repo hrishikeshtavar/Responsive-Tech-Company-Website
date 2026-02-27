@@ -1,54 +1,35 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Code, Smartphone, Globe, Cpu, Brain, ArrowRight, Lightbulb } from 'lucide-react';
-
-const services = [
-  {
-    icon: Globe,
-    title: 'Web Development',
-    description: 'Create stunning, responsive websites and web applications that drive engagement and deliver exceptional user experiences.',
-    color: 'from-cyan-500 to-blue-500',
-    delay: 0.1,
-  },
-  {
-    icon: Code,
-    title: 'Software Development',
-    description: 'Custom software solutions tailored to your business needs, built with modern technologies and best practices.',
-    color: 'from-blue-500 to-purple-500',
-    delay: 0.2,
-  },
-  {
-    icon: Smartphone,
-    title: 'Mobile App Development',
-    description: 'Native and cross-platform mobile applications for iOS and Android that provide seamless user experiences.',
-    color: 'from-purple-500 to-pink-500',
-    delay: 0.3,
-  },
-  {
-    icon: Cpu,
-    title: 'IoT Development',
-    description: 'Connect physical devices to the digital world with innovative IoT solutions that transform how businesses operate.',
-    color: 'from-pink-500 to-red-500',
-    delay: 0.4,
-  },
-  {
-    icon: Brain,
-    title: 'AI Solutions',
-    description: 'Harness the power of artificial intelligence and machine learning to automate processes and gain valuable insights.',
-    color: 'from-red-500 to-orange-500',
-    delay: 0.5,
-  },
-  {
-    icon: Lightbulb,
-    title: 'IT Consultation',
-    description: 'Expert technology consulting to help you make informed decisions and develop strategic technology roadmaps.',
-    color: 'from-orange-500 to-yellow-500',
-    delay: 0.6,
-  },
-];
+import { useSiteContent } from '../context/SiteContentContext';
+import type { IconKey } from '../lib/siteContent';
 
 export function Services() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const { content } = useSiteContent();
+  const section = content.services;
+  const services = section.items;
+  const iconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
+    code: Code,
+    smartphone: Smartphone,
+    globe: Globe,
+    cpu: Cpu,
+    wifi: Cpu,
+    database: Cpu,
+    shield: Cpu,
+    cloud: Cpu,
+    zap: Cpu,
+    brain: Brain,
+    lightbulb: Lightbulb,
+    target: Lightbulb,
+    rocket: Lightbulb,
+    code2: Code,
+    beaker: Lightbulb,
+    trendingUp: Lightbulb,
+    users: Lightbulb,
+    award: Lightbulb,
+    bookOpen: Lightbulb,
+  };
 
   return (
     <section id="services" className="relative py-20 md:py-32 bg-slate-900">
@@ -61,23 +42,26 @@ export function Services() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Services</span>
+            {section.titlePrefix}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {section.titleHighlight}
+            </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Comprehensive technology solutions to power your digital transformation
+            {section.subtitle}
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => {
-            const Icon = service.icon;
+            const Icon = iconMap[service.icon] || Lightbulb;
             return (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: service.delay }}
+                transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
                 whileHover={{ y: -10, scale: 1.02 }}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
@@ -141,12 +125,12 @@ export function Services() {
           className="mt-16 text-center"
         >
           <motion.a
-            href="#contact"
+            href={section.ctaHref}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:scale-105 transition-transform duration-300 hover:shadow-lg hover:shadow-cyan-500/50"
           >
-            <span>Start Your Project</span>
+            <span>{section.ctaText}</span>
             <ArrowRight className="w-5 h-5" />
           </motion.a>
         </motion.div>
