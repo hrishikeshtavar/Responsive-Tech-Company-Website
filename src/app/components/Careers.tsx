@@ -54,6 +54,29 @@ const fallbackCareersData: CareersCMSData = {
       applyUrl: 'mailto:careers@zenture.in?subject=Application%20-%20Backend%20Engineer',
       postedDate: '2026-02-18',
     },
+    {
+      id: 'fullstack-developer-01',
+      title: 'Full Stack Developer (Full-Time & Internship)',
+      department: 'Engineering',
+      location: 'Remote / Hybrid',
+      type: 'Full-time',
+      experience: 'Internship / 1-4 years',
+      summary:
+        'Build scalable web applications across frontend and backend, collaborate with product teams, and support cloud deployments for production-ready solutions.',
+      requirements: [
+        'Hands-on experience with modern JavaScript/TypeScript frameworks',
+        'Good understanding of REST APIs, databases, and backend architecture',
+        'Familiarity with cloud platforms and deployment workflows',
+      ],
+      responsibilities: [
+        'Develop and maintain end-to-end web features from UI to APIs',
+        'Collaborate with design and QA teams to ship high-quality releases',
+        'Contribute to performance, security, and maintainability improvements',
+      ],
+      applyUrl:
+        'mailto:careers@zenture.in?subject=Application%20-%20Full%20Stack%20Developer',
+      postedDate: '2026-02-27',
+    },
   ],
 };
 
