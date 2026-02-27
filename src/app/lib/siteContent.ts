@@ -90,6 +90,9 @@ export interface BlogPostContent {
   readTime: string;
   category: string;
   slug: string;
+  content?: string;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export interface BlogContent {
@@ -445,25 +448,99 @@ export const defaultSiteContent: SiteContent = {
     posts: [
       {
         id: 1,
-        title: 'The Future of AI in Software Development',
+        title: 'AI in Software Development: Practical Use Cases That Improve Delivery Speed',
         excerpt:
-          'Explore how artificial intelligence is revolutionizing the way we build and deploy software applications.',
+          'A practical guide to using AI in software development workflows for faster releases, better quality, and lower engineering cost.',
         author: 'Zenture Team',
-        date: '2026-02-15',
-        readTime: '5 min read',
+        date: '2026-02-20',
+        readTime: '8 min read',
         category: 'AI & ML',
-        slug: 'future-of-ai-in-software-development',
+        slug: 'ai-in-software-development-practical-use-cases',
+        metaTitle: 'AI in Software Development: Use Cases, Tools, and ROI | Zenture',
+        metaDescription:
+          'Learn how AI and ML improve software delivery with test automation, code review intelligence, and predictive planning.',
+        content:
+          'Artificial intelligence is now a practical engineering accelerator, not a future concept. Teams use AI-assisted coding for faster scaffolding, test generation for better QA coverage, and log anomaly detection to reduce production incidents. The highest ROI often comes from combining AI with disciplined engineering practices: clear architecture boundaries, quality gates, and measurable delivery metrics. At Zenture, we recommend starting with two implementation tracks. First, developer productivity: pair-programming assistants, AI code review checklists, and documentation generation. Second, operational intelligence: release risk scoring, error pattern clustering, and support-ticket classification. Organizations that adopt this phased approach typically reduce lead time and improve sprint predictability without compromising code quality.',
       },
       {
         id: 2,
-        title: 'Building Scalable IoT Solutions',
+        title: 'Building Scalable IoT Platforms: Architecture Patterns for Reliability',
         excerpt:
-          'Learn best practices for creating IoT systems that can handle millions of connected devices efficiently.',
-        author: 'John Doe',
-        date: '2026-02-10',
-        readTime: '7 min read',
+          'Design principles for IoT systems that support growth, secure device onboarding, and real-time analytics at scale.',
+        author: 'Zenture IoT Team',
+        date: '2026-02-18',
+        readTime: '9 min read',
         category: 'IoT',
-        slug: 'building-scalable-iot-solutions',
+        slug: 'building-scalable-iot-platforms-architecture-patterns',
+        metaTitle: 'Scalable IoT Architecture Patterns for Enterprise Systems | Zenture',
+        metaDescription:
+          'Discover how to architect secure and scalable IoT platforms with edge processing, event pipelines, and resilient cloud services.',
+        content:
+          'Scalable IoT architecture starts with clear separation between device communication, event processing, and application services. Use secure provisioning for every device identity, message brokers for decoupled ingestion, and stream processing for near-real-time decisions. For enterprise systems, edge computing reduces latency and cloud egress cost, while central observability ensures fleet-level visibility. Reliability depends on retry policies, dead-letter handling, and schema versioning for payloads. Security should be treated as a product capability, not an add-on: certificate rotation, least-privilege access, and signed firmware updates are baseline requirements. Teams that build these foundations early can scale from pilot to production faster and with fewer operational risks.',
+      },
+      {
+        id: 3,
+        title: 'Mobile App Development in 2026: Performance, Security, and UX Priorities',
+        excerpt:
+          'Key strategies for shipping fast, secure, and user-centric mobile apps across Android and iOS.',
+        author: 'Zenture Mobile Team',
+        date: '2026-02-15',
+        readTime: '7 min read',
+        category: 'Mobile Development',
+        slug: 'mobile-app-development-2026-performance-security-ux',
+        metaTitle: 'Mobile App Development 2026: Performance, Security, UX | Zenture',
+        metaDescription:
+          'Learn modern mobile development practices for high performance, secure architecture, and better app retention.',
+        content:
+          'Modern mobile development balances speed to market with long-term product quality. High-performing apps prioritize startup optimization, network efficiency, and responsive UI states. Security remains non-negotiable: secure token storage, certificate pinning where needed, and strict API authorization controls. On the user experience side, retention improves when teams invest in reliability, not just features. Offline handling, graceful error states, and fast support loops directly impact app ratings and engagement. Product teams should also align analytics with business outcomes by tracking activation, retention, and conversion events from day one. This enables data-informed roadmap decisions and sustainable growth.',
+      },
+      {
+        id: 4,
+        title: 'Cloud Computing Best Practices for Cost Optimization and Resilience',
+        excerpt:
+          'How to structure cloud architecture for high availability while controlling infrastructure spend.',
+        author: 'Zenture Cloud Team',
+        date: '2026-02-12',
+        readTime: '8 min read',
+        category: 'Cloud Computing',
+        slug: 'cloud-computing-best-practices-cost-optimization-resilience',
+        metaTitle: 'Cloud Best Practices: Cost Optimization and Resilience | Zenture',
+        metaDescription:
+          'A practical cloud strategy for scalable systems: right-sized compute, observability, and resilient deployment pipelines.',
+        content:
+          'Cloud architecture maturity comes from balancing resilience and cost efficiency. Start with workload profiling and right-size compute resources based on real usage patterns. Introduce autoscaling policies only where demand variability justifies it. For resilience, design with failure domains in mind: multi-zone deployment, health checks, and rollback-ready CI/CD pipelines. Observability should include service-level metrics, distributed tracing, and actionable alerting thresholds. Cost optimization is not only about reducing bills; it is about improving engineering decisions. Teams with clear ownership and visibility can forecast spending, prevent waste, and sustain platform reliability during growth.',
+      },
+      {
+        id: 5,
+        title: 'Web Application Security Checklist for Modern Engineering Teams',
+        excerpt:
+          'A practical security checklist covering authentication, API hardening, and deployment safeguards.',
+        author: 'Zenture Security Team',
+        date: '2026-02-09',
+        readTime: '10 min read',
+        category: 'Security',
+        slug: 'web-application-security-checklist-modern-engineering-teams',
+        metaTitle: 'Web App Security Checklist: Authentication, API, DevSecOps | Zenture',
+        metaDescription:
+          'Strengthen your web application security with practical controls across authentication, API hardening, and secure delivery pipelines.',
+        content:
+          'Application security is most effective when integrated into delivery workflows. Start with robust identity controls: strong session management, MFA for privileged users, and token lifecycle policies. API hardening should include schema validation, rate limiting, and explicit authorization checks at every sensitive boundary. Shift-left security practices such as dependency scanning, static analysis, and secret detection reduce exposure early in development. In production, WAF rules, centralized logging, and incident runbooks improve response readiness. Security must be iterative; periodic threat modeling and controlled penetration testing help teams adapt to changing attack patterns.',
+      },
+      {
+        id: 6,
+        title: 'Modern Software Development Lifecycle: Faster Delivery Without Quality Tradeoffs',
+        excerpt:
+          'How high-performing teams combine agile planning, engineering standards, and automation for reliable releases.',
+        author: 'Zenture Engineering',
+        date: '2026-02-06',
+        readTime: '9 min read',
+        category: 'Development',
+        slug: 'modern-software-development-lifecycle-faster-delivery',
+        metaTitle: 'Modern SDLC: Faster Delivery With High Quality | Zenture',
+        metaDescription:
+          'Build a modern software development lifecycle with automation, quality gates, and release confidence at scale.',
+        content:
+          'A modern SDLC is defined by tight feedback loops, strong quality gates, and predictable release motion. Agile planning works best when paired with clear definition of done, enforceable coding standards, and automated testing at multiple levels. Continuous integration pipelines should validate linting, unit tests, and security checks before merge approval. Continuous delivery improves when environments are reproducible and deployment steps are version-controlled. Engineering leaders should measure throughput and quality together, tracking cycle time, change failure rate, and mean time to restore service. This balance enables teams to move fast while maintaining product stability and stakeholder trust.',
       },
     ],
   },
@@ -586,19 +663,19 @@ export const defaultSiteContent: SiteContent = {
       {
         type: 'email',
         title: 'Email',
-        content: 'contact@zentureit.com',
-        link: 'mailto:contact@zentureit.com',
+        content: 'info@zenture.in',
+        link: 'mailto:info@zenture.in',
       },
       {
         type: 'phone',
         title: 'Phone',
-        content: '+91 (XXX) XXX-XXXX',
-        link: 'tel:+91XXXXXXXXXX',
+        content: '+91 7715861605',
+        link: 'tel:+917715861605',
       },
       {
         type: 'location',
         title: 'Location',
-        content: 'India',
+        content: 'NIBM, Pune - MH, India',
       },
     ],
   },

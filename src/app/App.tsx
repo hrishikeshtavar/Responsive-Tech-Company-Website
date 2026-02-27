@@ -16,12 +16,27 @@ import { IoTShowcase } from './components/IoTShowcase';
 import TrustedBy from "./components/TrustedBy";
 import { Careers } from './components/Careers';
 import { SiteContentProvider } from './context/SiteContentContext';
+import { BlogArticle } from './components/BlogArticle';
 
 export default function App() {
   // Keep routing lightweight for this static deployment:
   // add/remove top-level pages by extending this pathname switch.
   const pathname = window.location.pathname;
   const isCareersPage = pathname === '/careers';
+  const isBlogArticlePage = pathname.startsWith('/blog/');
+
+  if (isBlogArticlePage) {
+    return (
+      <SiteContentProvider>
+        <div className="min-h-screen bg-slate-900">
+          <ScrollProgress />
+          <Navbar />
+          <BlogArticle />
+          <Footer />
+        </div>
+      </SiteContentProvider>
+    );
+  }
 
   if (isCareersPage) {
     return (

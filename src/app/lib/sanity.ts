@@ -120,7 +120,19 @@ const siteContentQuery = groq`*[_type == "siteContent"][0]{
     titleHighlight,
     subtitle,
     categories,
-    posts
+    "posts": posts[]{
+      id,
+      title,
+      excerpt,
+      author,
+      date,
+      readTime,
+      category,
+      slug,
+      content,
+      metaTitle,
+      metaDescription
+    }
   },
   research{
     titlePrefix,

@@ -117,7 +117,7 @@ export function Blog() {
                     <span className="text-sm text-gray-500">{post.author}</span>
                   </div>
                   <a
-                    href={`#blog/${post.slug}`}
+                    href={`/blog/${post.slug}`}
                     className="flex items-center gap-1 text-cyan-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <span>Read More</span>

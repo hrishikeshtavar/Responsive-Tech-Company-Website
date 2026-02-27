@@ -56,6 +56,12 @@ In `siteContent -> portfolio -> items[]`:
 - set `liveUrl` to enable the external-link icon
 - set `repoUrl` to enable the GitHub icon
 
+## Blog CMS Controls
+In `siteContent -> blog -> posts[]`:
+- add one post for each category/tag you want to display
+- each post supports `content`, `metaTitle`, and `metaDescription` for SEO
+- post links open on dedicated pages at `/blog/{slug}`
+
 ## SEO Editing
 - Runtime SEO tags/schema: `src/app/components/SEO.tsx`
 - Base metadata fallback: `index.html`
