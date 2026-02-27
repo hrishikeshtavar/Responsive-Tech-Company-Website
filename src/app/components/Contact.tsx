@@ -7,6 +7,8 @@ export function Contact() {
   const { content } = useSiteContent();
   const section = content.contact;
   const formStartRef = useRef<number>(Date.now());
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<string>('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,29 +17,49 @@ export function Contact() {
     website: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitMessage('');
 
     // Lightweight spam protection: honeypot + minimum fill time.
     const timeToSubmitMs = Date.now() - formStartRef.current;
     if (formData.website || timeToSubmitMs < 3000) {
-      alert('Unable to submit right now. Please try again.');
+      setSubmitMessage('Unable to submit right now. Please try again.');
       return;
     }
 
-    const subject = encodeURIComponent(`New Contact Inquiry - ${formData.name}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}
-Email: ${formData.email}
-Company: ${formData.company || 'N/A'}
+    try {
+      setIsSubmitting(true);
+      const response = await fetch('https://formsubmit.co/ajax/info@zenture.in', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company || 'N/A',
+          message: formData.message,
+          _subject: `New Contact Inquiry - ${formData.name}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
 
-Project Details:
-${formData.message}`,
-    );
-    window.location.href = `mailto:info@zenture.in?subject=${subject}&body=${body}`;
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
 
-    setFormData({ name: '', email: '', company: '', message: '', website: '' });
-    formStartRef.current = Date.now();
+      setFormData({ name: '', email: '', company: '', message: '', website: '' });
+      formStartRef.current = Date.now();
+      setSubmitMessage('Thanks. Your message has been sent to info@zenture.in.');
+    } catch (error) {
+      console.error('Failed to submit contact form:', error);
+      setSubmitMessage('Submission failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -221,6 +243,7 @@ ${formData.message}`,
                 type="submit"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                disabled={isSubmitting}
                 className="group w-full px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 flex items-center justify-center space-x-2 relative overflow-hidden"
               >
                 <motion.div
@@ -229,9 +252,12 @@ ${formData.message}`,
                   whileHover={{ x: '100%' }}
                   transition={{ duration: 0.6 }}
                 />
-                <span className="relative z-10">Send Message</span>
+                <span className="relative z-10">{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                 <Send className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
               </motion.button>
+              {submitMessage ? (
+                <p className="text-sm text-slate-300">{submitMessage}</p>
+              ) : null}
             </form>
           </motion.div>
         </div>

@@ -96,6 +96,8 @@ export function Careers() {
   const [cmsData, setCmsData] = useState<CareersCMSData>(fallbackCareersData);
   const [isLoading, setIsLoading] = useState(true);
   const formStartRef = useRef<number>(Date.now());
+  const [isSubmittingApplication, setIsSubmittingApplication] = useState(false);
+  const [applicationSubmitMessage, setApplicationSubmitMessage] = useState('');
   const [applicationForm, setApplicationForm] = useState({
     fullName: '',
     email: '',
@@ -159,38 +161,56 @@ export function Careers() {
     setApplicationForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleApplicationSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleApplicationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setApplicationSubmitMessage('');
 
     const timeToSubmitMs = Date.now() - formStartRef.current;
     if (applicationForm.website || timeToSubmitMs < 3000) {
-      alert('Unable to submit right now. Please try again.');
+      setApplicationSubmitMessage('Unable to submit right now. Please try again.');
       return;
     }
 
-    const subject = encodeURIComponent(
-      `Career Application - ${applicationForm.position || 'General Application'}`,
-    );
-    const body = encodeURIComponent(
-      `Name: ${applicationForm.fullName}
-Email: ${applicationForm.email}
-Phone: ${applicationForm.phone}
-Position: ${applicationForm.position || 'Not specified'}
+    try {
+      setIsSubmittingApplication(true);
+      const response = await fetch('https://formsubmit.co/ajax/careers@zenture.in', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: applicationForm.fullName,
+          email: applicationForm.email,
+          phone: applicationForm.phone,
+          position: applicationForm.position || 'General Application',
+          message: applicationForm.message,
+          _subject: `Career Application - ${applicationForm.position || 'General Application'}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
 
-Message:
-${applicationForm.message}`,
-    );
-    window.location.href = `mailto:careers@zenture.in?subject=${subject}&body=${body}`;
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
 
-    setApplicationForm({
-      fullName: '',
-      email: '',
-      phone: '',
-      position: '',
-      message: '',
-      website: '',
-    });
-    formStartRef.current = Date.now();
+      setApplicationForm({
+        fullName: '',
+        email: '',
+        phone: '',
+        position: '',
+        message: '',
+        website: '',
+      });
+      formStartRef.current = Date.now();
+      setApplicationSubmitMessage('Application sent to careers@zenture.in.');
+    } catch (error) {
+      console.error('Failed to submit careers application:', error);
+      setApplicationSubmitMessage('Submission failed. Please try again.');
+    } finally {
+      setIsSubmittingApplication(false);
+    }
   };
 
   return (
@@ -302,7 +322,7 @@ ${applicationForm.message}`,
         >
           <h2 className="mb-2 text-2xl text-white">Apply via Form</h2>
           <p className="mb-6 text-slate-300">
-            Submit your details and we will open your email client addressed to careers@zenture.in.
+            Submit your details and we will send your application to careers@zenture.in.
           </p>
 
           <form onSubmit={handleApplicationSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -371,11 +391,15 @@ ${applicationForm.message}`,
 
             <button
               type="submit"
+              disabled={isSubmittingApplication}
               className="md:col-span-2 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 text-white transition hover:shadow-lg hover:shadow-cyan-500/40"
             >
               <Send className="h-4 w-4" />
-              Submit Application
+              {isSubmittingApplication ? 'Sending...' : 'Submit Application'}
             </button>
+            {applicationSubmitMessage ? (
+              <p className="md:col-span-2 text-sm text-slate-300">{applicationSubmitMessage}</p>
+            ) : null}
           </form>
         </motion.div>
       </div>
