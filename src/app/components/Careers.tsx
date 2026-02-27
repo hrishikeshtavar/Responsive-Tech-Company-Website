@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Briefcase, Building2, Clock3, MapPin, Send } from 'lucide-react';
+import { Briefcase, Building2, CheckCircle2, Clock3, MapPin, Send } from 'lucide-react';
 import {
   fetchCareersFromSanity,
   type CareerPosition,
@@ -96,8 +96,12 @@ export function Careers() {
   const [cmsData, setCmsData] = useState<CareersCMSData>(fallbackCareersData);
   const [isLoading, setIsLoading] = useState(true);
   const formStartRef = useRef<number>(Date.now());
+  const applicationFormRef = useRef<HTMLDivElement | null>(null);
+  const resumeInputRef = useRef<HTMLInputElement | null>(null);
   const [isSubmittingApplication, setIsSubmittingApplication] = useState(false);
   const [applicationSubmitMessage, setApplicationSubmitMessage] = useState('');
+  const [isApplicationSubmitted, setIsApplicationSubmitted] = useState(false);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [applicationForm, setApplicationForm] = useState({
     fullName: '',
     email: '',
@@ -161,6 +165,18 @@ export function Careers() {
     setApplicationForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] ?? null;
+    setResumeFile(selectedFile);
+  };
+
+  const handleApplyNowClick = (positionTitle: string) => {
+    setApplicationForm((prev) => ({ ...prev, position: positionTitle }));
+    setIsApplicationSubmitted(false);
+    setApplicationSubmitMessage('');
+    applicationFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const handleApplicationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setApplicationSubmitMessage('');
@@ -170,25 +186,31 @@ export function Careers() {
       setApplicationSubmitMessage('Unable to submit right now. Please try again.');
       return;
     }
+    if (!resumeFile) {
+      setApplicationSubmitMessage('Please attach your resume before submitting.');
+      return;
+    }
 
     try {
       setIsSubmittingApplication(true);
+      const payload = new FormData();
+      payload.append('fullName', applicationForm.fullName);
+      payload.append('email', applicationForm.email);
+      payload.append('phone', applicationForm.phone);
+      payload.append('position', applicationForm.position || 'General Application');
+      payload.append('message', applicationForm.message);
+      payload.append('resume', resumeFile);
+      payload.append(
+        '_subject',
+        `Career Application - ${applicationForm.position || 'General Application'}`,
+      );
+      payload.append('_template', 'table');
+      payload.append('_captcha', 'false');
+
       const response = await fetch('https://formsubmit.co/ajax/careers@zenture.in', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          fullName: applicationForm.fullName,
-          email: applicationForm.email,
-          phone: applicationForm.phone,
-          position: applicationForm.position || 'General Application',
-          message: applicationForm.message,
-          _subject: `Career Application - ${applicationForm.position || 'General Application'}`,
-          _template: 'table',
-          _captcha: 'false',
-        }),
+        headers: { Accept: 'application/json' },
+        body: payload,
       });
 
       if (!response.ok) {
@@ -203,8 +225,13 @@ export function Careers() {
         message: '',
         website: '',
       });
+      setResumeFile(null);
+      if (resumeInputRef.current) {
+        resumeInputRef.current.value = '';
+      }
       formStartRef.current = Date.now();
       setApplicationSubmitMessage('Application sent to careers@zenture.in.');
+      setIsApplicationSubmitted(true);
     } catch (error) {
       console.error('Failed to submit careers application:', error);
       setApplicationSubmitMessage('Submission failed. Please try again.');
@@ -261,12 +288,13 @@ export function Careers() {
                   <h2 className="text-2xl text-white">{position.title}</h2>
                   <p className="mt-2 text-slate-300">{position.summary}</p>
                 </div>
-                <a
-                  href={position.applyUrl}
+                <button
+                  type="button"
+                  onClick={() => handleApplyNowClick(position.title)}
                   className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 text-white transition hover:shadow-lg hover:shadow-cyan-500/40"
                 >
                   Apply Now
-                </a>
+                </button>
               </div>
 
               <div className="mb-6 grid grid-cols-1 gap-3 text-sm text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
@@ -315,6 +343,7 @@ export function Careers() {
         </div>
 
         <motion.div
+          ref={applicationFormRef}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
@@ -325,82 +354,114 @@ export function Careers() {
             Submit your details and we will send your application to careers@zenture.in.
           </p>
 
-          <form onSubmit={handleApplicationSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <input
-              type="text"
-              name="fullName"
-              required
-              value={applicationForm.fullName}
-              onChange={handleApplicationChange}
-              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
-              placeholder="Full name"
-            />
-            <input
-              type="email"
-              name="email"
-              required
-              value={applicationForm.email}
-              onChange={handleApplicationChange}
-              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
-              placeholder="Email address"
-            />
-            <input
-              type="tel"
-              name="phone"
-              required
-              value={applicationForm.phone}
-              onChange={handleApplicationChange}
-              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
-              placeholder="Phone number"
-            />
-            <select
-              name="position"
-              value={applicationForm.position}
-              onChange={handleApplicationChange}
-              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
-            >
-              <option value="">Select position</option>
-              {sortedPositions.map((position) => (
-                <option key={position.id} value={position.title}>
-                  {position.title}
-                </option>
-              ))}
-            </select>
-            <textarea
-              name="message"
-              required
-              value={applicationForm.message}
-              onChange={handleApplicationChange}
-              rows={5}
-              className="md:col-span-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
-              placeholder="Tell us about your experience"
-            />
-
-            <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
-              <label htmlFor="career-website">Website</label>
+          {!isApplicationSubmitted ? (
+            <form onSubmit={handleApplicationSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <input
-                id="career-website"
                 type="text"
-                name="website"
-                tabIndex={-1}
-                autoComplete="off"
-                value={applicationForm.website}
+                name="fullName"
+                required
+                value={applicationForm.fullName}
                 onChange={handleApplicationChange}
+                className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+                placeholder="Full name"
               />
-            </div>
+              <input
+                type="email"
+                name="email"
+                required
+                value={applicationForm.email}
+                onChange={handleApplicationChange}
+                className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+                placeholder="Email address"
+              />
+              <input
+                type="tel"
+                name="phone"
+                required
+                value={applicationForm.phone}
+                onChange={handleApplicationChange}
+                className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+                placeholder="Phone number"
+              />
+              <select
+                name="position"
+                value={applicationForm.position}
+                onChange={handleApplicationChange}
+                className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+              >
+                <option value="">Select position</option>
+                {sortedPositions.map((position) => (
+                  <option key={position.id} value={position.title}>
+                    {position.title}
+                  </option>
+                ))}
+              </select>
+              <textarea
+                name="message"
+                required
+                value={applicationForm.message}
+                onChange={handleApplicationChange}
+                rows={5}
+                className="md:col-span-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+                placeholder="Tell us about your experience"
+              />
+              <div className="md:col-span-2">
+                <label htmlFor="resume" className="mb-2 block text-sm text-slate-300">
+                  Resume (PDF/DOC) *
+                </label>
+                <input
+                  ref={resumeInputRef}
+                  id="resume"
+                  type="file"
+                  name="resume"
+                  required
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleResumeChange}
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white file:mr-4 file:rounded-md file:border-0 file:bg-cyan-500 file:px-3 file:py-2 file:text-white hover:file:bg-cyan-600 focus:border-cyan-500 focus:outline-none"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={isSubmittingApplication}
-              className="md:col-span-2 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 text-white transition hover:shadow-lg hover:shadow-cyan-500/40"
+              <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                <label htmlFor="career-website">Website</label>
+                <input
+                  id="career-website"
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={applicationForm.website}
+                  onChange={handleApplicationChange}
+                />
+              </div>
+
+              <motion.button
+                type="submit"
+                animate={isSubmittingApplication ? { scale: [1, 1.01, 1] } : { scale: 1 }}
+                transition={{ repeat: isSubmittingApplication ? Infinity : 0, duration: 0.9 }}
+                disabled={isSubmittingApplication}
+                className="md:col-span-2 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 text-white transition hover:shadow-lg hover:shadow-cyan-500/40"
+              >
+                <Send className="h-4 w-4" />
+                {isSubmittingApplication ? 'Sending...' : 'Submit Application'}
+              </motion.button>
+              {applicationSubmitMessage ? (
+                <p className="md:col-span-2 text-sm text-slate-300">{applicationSubmitMessage}</p>
+              ) : null}
+            </form>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center"
             >
-              <Send className="h-4 w-4" />
-              {isSubmittingApplication ? 'Sending...' : 'Submit Application'}
-            </button>
-            {applicationSubmitMessage ? (
-              <p className="md:col-span-2 text-sm text-slate-300">{applicationSubmitMessage}</p>
-            ) : null}
-          </form>
+              <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-emerald-400" />
+              <h3 className="text-2xl text-white">Application Submitted</h3>
+              <p className="mt-2 text-slate-300">
+                We have received your details and resume at careers@zenture.in.
+              </p>
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </section>
