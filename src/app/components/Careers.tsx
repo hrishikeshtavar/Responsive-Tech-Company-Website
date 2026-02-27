@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Briefcase, Building2, Clock3, MapPin } from 'lucide-react';
+import { Briefcase, Building2, Clock3, MapPin, Send } from 'lucide-react';
 import {
   fetchCareersFromSanity,
   type CareerPosition,
@@ -30,7 +30,7 @@ const fallbackCareersData: CareersCMSData = {
         'Translate Figma and product requirements into production UI',
         'Optimize performance and improve front-end quality',
       ],
-      applyUrl: 'mailto:careers@zentureit.com?subject=Application%20-%20Frontend%20Engineer',
+      applyUrl: 'mailto:careers@zenture.in?subject=Application%20-%20Frontend%20Engineer',
       postedDate: '2026-02-20',
     },
     {
@@ -51,7 +51,7 @@ const fallbackCareersData: CareersCMSData = {
         'Maintain backend performance and observability',
         'Work with frontend and DevOps teams for releases',
       ],
-      applyUrl: 'mailto:careers@zentureit.com?subject=Application%20-%20Backend%20Engineer',
+      applyUrl: 'mailto:careers@zenture.in?subject=Application%20-%20Backend%20Engineer',
       postedDate: '2026-02-18',
     },
   ],
@@ -95,6 +95,15 @@ const isCareersData = (item: unknown): item is CareersCMSData => {
 export function Careers() {
   const [cmsData, setCmsData] = useState<CareersCMSData>(fallbackCareersData);
   const [isLoading, setIsLoading] = useState(true);
+  const formStartRef = useRef<number>(Date.now());
+  const [applicationForm, setApplicationForm] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    position: '',
+    message: '',
+    website: '',
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -143,6 +152,46 @@ export function Careers() {
       ),
     [cmsData.positions],
   );
+
+  const handleApplicationChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    setApplicationForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleApplicationSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const timeToSubmitMs = Date.now() - formStartRef.current;
+    if (applicationForm.website || timeToSubmitMs < 3000) {
+      alert('Unable to submit right now. Please try again.');
+      return;
+    }
+
+    const subject = encodeURIComponent(
+      `Career Application - ${applicationForm.position || 'General Application'}`,
+    );
+    const body = encodeURIComponent(
+      `Name: ${applicationForm.fullName}
+Email: ${applicationForm.email}
+Phone: ${applicationForm.phone}
+Position: ${applicationForm.position || 'Not specified'}
+
+Message:
+${applicationForm.message}`,
+    );
+    window.location.href = `mailto:careers@zenture.in?subject=${subject}&body=${body}`;
+
+    setApplicationForm({
+      fullName: '',
+      email: '',
+      phone: '',
+      position: '',
+      message: '',
+      website: '',
+    });
+    formStartRef.current = Date.now();
+  };
 
   return (
     <section className="relative overflow-hidden bg-slate-900 pt-28 pb-20 md:pt-36 md:pb-28">
@@ -244,6 +293,91 @@ export function Careers() {
             </motion.article>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-12 rounded-2xl border border-slate-700 bg-slate-800/50 p-6 shadow-lg shadow-cyan-950/20 md:p-8"
+        >
+          <h2 className="mb-2 text-2xl text-white">Apply via Form</h2>
+          <p className="mb-6 text-slate-300">
+            Submit your details and we will open your email client addressed to careers@zenture.in.
+          </p>
+
+          <form onSubmit={handleApplicationSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <input
+              type="text"
+              name="fullName"
+              required
+              value={applicationForm.fullName}
+              onChange={handleApplicationChange}
+              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+              placeholder="Full name"
+            />
+            <input
+              type="email"
+              name="email"
+              required
+              value={applicationForm.email}
+              onChange={handleApplicationChange}
+              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+              placeholder="Email address"
+            />
+            <input
+              type="tel"
+              name="phone"
+              required
+              value={applicationForm.phone}
+              onChange={handleApplicationChange}
+              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+              placeholder="Phone number"
+            />
+            <select
+              name="position"
+              value={applicationForm.position}
+              onChange={handleApplicationChange}
+              className="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+            >
+              <option value="">Select position</option>
+              {sortedPositions.map((position) => (
+                <option key={position.id} value={position.title}>
+                  {position.title}
+                </option>
+              ))}
+            </select>
+            <textarea
+              name="message"
+              required
+              value={applicationForm.message}
+              onChange={handleApplicationChange}
+              rows={5}
+              className="md:col-span-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-white focus:border-cyan-500 focus:outline-none"
+              placeholder="Tell us about your experience"
+            />
+
+            <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <label htmlFor="career-website">Website</label>
+              <input
+                id="career-website"
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={applicationForm.website}
+                onChange={handleApplicationChange}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="md:col-span-2 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 text-white transition hover:shadow-lg hover:shadow-cyan-500/40"
+            >
+              <Send className="h-4 w-4" />
+              Submit Application
+            </button>
+          </form>
+        </motion.div>
       </div>
     </section>
   );

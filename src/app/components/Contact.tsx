@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useSiteContent } from '../context/SiteContentContext';
@@ -6,19 +6,38 @@ import { useSiteContent } from '../context/SiteContentContext';
 export function Contact() {
   const { content } = useSiteContent();
   const section = content.contact;
+  const formStartRef = useRef<number>(Date.now());
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
     message: '',
+    website: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', company: '', message: '' });
+
+    // Lightweight spam protection: honeypot + minimum fill time.
+    const timeToSubmitMs = Date.now() - formStartRef.current;
+    if (formData.website || timeToSubmitMs < 3000) {
+      alert('Unable to submit right now. Please try again.');
+      return;
+    }
+
+    const subject = encodeURIComponent(`New Contact Inquiry - ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}
+Email: ${formData.email}
+Company: ${formData.company || 'N/A'}
+
+Project Details:
+${formData.message}`,
+    );
+    window.location.href = `mailto:info@zenture.in?subject=${subject}&body=${body}`;
+
+    setFormData({ name: '', email: '', company: '', message: '', website: '' });
+    formStartRef.current = Date.now();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -181,6 +200,20 @@ export function Contact() {
                   rows={5}
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
                   placeholder="Tell us about your project..."
+                />
+              </div>
+
+              {/* Honeypot field: should stay empty for real users */}
+              <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.website}
+                  onChange={handleChange}
                 />
               </div>
 
