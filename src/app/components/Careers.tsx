@@ -199,7 +199,9 @@ export function Careers() {
       payload.append('phone', applicationForm.phone);
       payload.append('position', applicationForm.position || 'General Application');
       payload.append('message', applicationForm.message);
-      payload.append('resume', resumeFile);
+      // FormSubmit file attachments should be posted as `attachment`.
+      payload.append('attachment', resumeFile, resumeFile.name);
+      payload.append('resumeFileName', resumeFile.name);
       payload.append(
         '_subject',
         `Career Application - ${applicationForm.position || 'General Application'}`,
@@ -413,7 +415,7 @@ export function Careers() {
                   ref={resumeInputRef}
                   id="resume"
                   type="file"
-                  name="resume"
+                  name="attachment"
                   required
                   accept=".pdf,.doc,.docx"
                   onChange={handleResumeChange}
