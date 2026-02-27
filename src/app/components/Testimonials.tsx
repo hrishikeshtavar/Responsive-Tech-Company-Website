@@ -220,32 +220,6 @@ export function Testimonials() {
           </button>
         </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
-        >
-          {section.stats.map((stat, index) => (
-            <div
-              key={stat.label}
-              className="text-center p-6 bg-slate-800/30 border border-slate-700/50 rounded-xl"
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2"
-              >
-                {stat.number}
-              </motion.div>
-              <p className="text-gray-400 text-sm">{stat.label}</p>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

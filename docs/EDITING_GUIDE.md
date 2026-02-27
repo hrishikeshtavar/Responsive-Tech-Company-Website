@@ -49,6 +49,13 @@ For `siteContent` arrays that include `icon`, use supported keys:
 - `wifi`, `database`, `shield`, `cloud`, `zap`
 - `beaker`, `trendingUp`, `users`, `award`, `bookOpen`
 
+## Portfolio CMS Controls
+In `siteContent -> portfolio -> items[]`:
+- add/remove items to manage project cards
+- set `isActive` to hide/show a project without deleting
+- set `liveUrl` to enable the external-link icon
+- set `repoUrl` to enable the GitHub icon
+
 ## SEO Editing
 - Runtime SEO tags/schema: `src/app/components/SEO.tsx`
 - Base metadata fallback: `index.html`

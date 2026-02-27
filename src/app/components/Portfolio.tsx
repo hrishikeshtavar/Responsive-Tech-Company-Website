@@ -7,8 +7,9 @@ import type { IconKey } from '../lib/siteContent';
 export function Portfolio() {
   const { content } = useSiteContent();
   const section = content.portfolio;
-  const projects = section.items;
-  const categories = section.categories;
+  const projects = section.items.filter((project) => project.isActive !== false);
+  const autoCategories = Array.from(new Set(projects.map((project) => project.category)));
+  const categories = section.categories.length > 0 ? section.categories : ['All', ...autoCategories];
   const [activeCategory, setActiveCategory] = useState('All');
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const iconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
@@ -122,12 +123,26 @@ export function Portfolio() {
                       animate={{ opacity: hoveredProject === project.id ? 1 : 0 }}
                       className="absolute inset-0 bg-black/60 flex items-center justify-center gap-4"
                     >
-                      <button className="p-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-colors">
-                        <ExternalLink className="w-5 h-5 text-white" />
-                      </button>
-                      <button className="p-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-colors">
-                        <Github className="w-5 h-5 text-white" />
-                      </button>
+                      {project.liveUrl ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-colors"
+                        >
+                          <ExternalLink className="w-5 h-5 text-white" />
+                        </a>
+                      ) : null}
+                      {project.repoUrl ? (
+                        <a
+                          href={project.repoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-colors"
+                        >
+                          <Github className="w-5 h-5 text-white" />
+                        </a>
+                      ) : null}
                     </motion.div>
                   </div>
 

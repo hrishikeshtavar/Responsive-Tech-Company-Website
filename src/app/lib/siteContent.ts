@@ -66,6 +66,9 @@ export interface PortfolioItem {
   tags: string[];
   icon: IconKey;
   gradient: string;
+  isActive?: boolean;
+  liveUrl?: string;
+  repoUrl?: string;
 }
 
 export interface PortfolioContent {
@@ -402,6 +405,9 @@ export const defaultSiteContent: SiteContent = {
         tags: ['React', 'Node.js', 'WebRTC', 'Security'],
         icon: 'code2',
         gradient: 'from-cyan-500 to-blue-600',
+        isActive: true,
+        liveUrl: '#',
+        repoUrl: '#',
       },
       {
         id: 2,
@@ -412,6 +418,9 @@ export const defaultSiteContent: SiteContent = {
         tags: ['Angular', 'Python', 'MongoDB', 'GIS'],
         icon: 'globe',
         gradient: 'from-green-500 to-emerald-600',
+        isActive: true,
+        liveUrl: '#',
+        repoUrl: '#',
       },
       {
         id: 3,
@@ -422,6 +431,9 @@ export const defaultSiteContent: SiteContent = {
         tags: ['Flutter', 'Firebase', 'AI/ML'],
         icon: 'smartphone',
         gradient: 'from-purple-500 to-pink-600',
+        isActive: true,
+        liveUrl: '#',
+        repoUrl: '#',
       },
     ],
   },

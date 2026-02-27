@@ -187,6 +187,7 @@ function GradientLine() {
 export default function TrustedBy() {
   const { content } = useSiteContent();
   const section = content.trustedBy;
+  const yearsOfTrust = Math.max(new Date().getFullYear() - 2019, 1);
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -304,7 +305,7 @@ export default function TrustedBy() {
             <StatPill value={55} suffix="+" label="Clients"            active={visible} />
             <StatPill value={15} suffix="+" label="Industries"         active={visible} />
             <StatPill value={98} suffix="%" label="Satisfaction Rate"  active={visible} />
-            <StatPill value={7}  suffix="+" label="Trust Years"        active={visible} />
+            <StatPill value={yearsOfTrust}  suffix="+" label="Trust Years"        active={visible} />
           </div>
         </div>
 

@@ -8,6 +8,7 @@ import type { IconKey } from '../lib/siteContent';
 export function About() {
   const { content } = useSiteContent();
   const about = content.about;
+  const yearsOfExcellence = Math.max(new Date().getFullYear() - 2019, 1);
   const valueIconMap: Record<IconKey, React.ComponentType<{ className?: string }>> = {
     target: Target,
     lightbulb: Lightbulb,
@@ -78,8 +79,8 @@ export function About() {
               className="absolute -bottom-6 -right-6 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl p-6 shadow-2xl"
             >
               <div className="text-white">
-                <p className="text-3xl mb-1">{about.yearsValue}</p>
-                <p className="text-sm opacity-90">{about.yearsLabel}</p>
+                <p className="text-3xl mb-1">{yearsOfExcellence}+</p>
+                <p className="text-sm opacity-90">Years of Excellence</p>
               </div>
             </motion.div>
           </motion.div>

@@ -5,7 +5,7 @@ import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'Zenture IT Solution website ',
+  title: 'Zenture IT Solution final',
 
   projectId: 'pyodekba',
   dataset: 'production',

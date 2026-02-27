@@ -155,6 +155,8 @@ const categories = [
 ];
 
 export function TechStack() {
+  const yearsOfExperience = Math.max(new Date().getFullYear() - 2019, 1);
+
   return (
     <section
       id="tech-stack"
@@ -244,9 +246,9 @@ export function TechStack() {
           className="grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {[
-            { number: "50+", label: "Technologies" },
-            { number: "100+", label: "Projects Completed" },
-            { number: "15+", label: "Years Experience" },
+            { number: "35+", label: "Technologies" },
+            { number: "75+", label: "Projects Completed" },
+            { number: `${yearsOfExperience}+`, label: "Years Experience" },
             { number: "98%", label: "Client Satisfaction" },
           ].map((stat, index) => (
             <div
